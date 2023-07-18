@@ -2,6 +2,15 @@
 	import Counter from './Counter.svelte';
 	import welcome from '$lib/images/svelte-welcome.webp';
 	import welcome_fallback from '$lib/images/svelte-welcome.png';
+
+	import { invoke } from '@tauri-apps/api/tauri';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		invoke('get_projects').then((projects) => {
+			console.log(projects);
+		});
+	});
 </script>
 
 <svelte:head>
