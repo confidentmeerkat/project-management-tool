@@ -3,16 +3,25 @@
 	import { open } from '@tauri-apps/api/dialog';
 	import { onMount } from 'svelte';
 
+	let projects = [];
+
 	onMount(() => {
-		invoke('get_projects').then((projects) => {
-			console.log(projects);
+		invoke('get_projects').then((items) => {
+			projects = items;
 		});
 	});
 
 	const openPicker = async () => {
 		const path = await open({ directory: true, multiple: false });
 
-		console.log(path);
+		invoke('create_project', { path }).then((result) => {
+			if (result === 'success') {
+				invoke('get_projects').then((items) => {
+					console.log(items);
+					projects = items;
+				});
+			}
+		});
 	};
 </script>
 

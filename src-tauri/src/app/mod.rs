@@ -1,4 +1,4 @@
-use mongodb::bson::Document;
+use mongodb::bson::{doc, Document};
 use mongodb::{
     options::ClientOptions,
     sync::{Client, Collection},
@@ -39,4 +39,20 @@ pub fn get_projects() -> Vec<Document> {
     let result = app.service_container.project.index();
 
     return result.unwrap();
+}
+
+#[command]
+pub fn create_project(path: String) -> String {
+    let app = App::new();
+
+    let new_project = doc! {
+        "path": path,
+    };
+
+    let result = app.service_container.project.create(new_project);
+
+    match result {
+        Err(err) => "failed".to_owned(),
+        Ok(result) => "success".to_owned(),
+    }
 }

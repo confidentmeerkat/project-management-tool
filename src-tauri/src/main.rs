@@ -7,7 +7,10 @@ fn main() {
     let app = app::App::new();
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![app::get_projects])
+        .invoke_handler(tauri::generate_handler![
+            app::get_projects,
+            app::create_project
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

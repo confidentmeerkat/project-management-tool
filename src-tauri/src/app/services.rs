@@ -32,4 +32,16 @@ impl ProjectService {
             }
         }
     }
+
+    pub fn create(&self, project: Document) -> Result<Document, mongodb::error::Error> {
+        let project_clone = project.clone();
+
+        match self.collection.insert_one(project_clone, None) {
+            Err(err) => Err(err),
+            Ok(result) => {
+                let path = project.get("path");
+                Ok(doc! {"path": path})
+            }
+        }
+    }
 }
