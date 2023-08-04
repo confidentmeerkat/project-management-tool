@@ -56,3 +56,24 @@ pub fn create_project(path: String) -> String {
         Ok(result) => "success".to_owned(),
     }
 }
+
+#[command]
+pub fn open_project(path: String) -> String {
+    let userpath = std::env::var_os("USERPROFILE")
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .replace("\"", "")
+        .replace("\\\\", "\\");
+
+    match std::process::Command::new(format!(
+        "{}\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd",
+        userpath
+    ))
+    .arg(path)
+    .output()
+    {
+        Err(err) => err.to_string(),
+        Ok(result) => result.status.to_string(),
+    }
+}

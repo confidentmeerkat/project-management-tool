@@ -1,13 +1,15 @@
-<script>
+<script lang="ts">
 	import { invoke } from '@tauri-apps/api/tauri';
 	import { open } from '@tauri-apps/api/dialog';
 	import { onMount } from 'svelte';
+	import ProjectItem from './project-item.svelte';
+	import type { Project } from '../types';
 
-	let projects = [];
+	let projects: Array<Project> = [];
 
 	onMount(() => {
 		invoke('get_projects').then((items) => {
-			projects = items;
+			projects = items as Project[];
 		});
 	});
 
@@ -17,8 +19,7 @@
 		invoke('create_project', { path }).then((result) => {
 			if (result === 'success') {
 				invoke('get_projects').then((items) => {
-					console.log(items);
-					projects = items;
+					projects = items as Project[];
 				});
 			}
 		});
@@ -32,4 +33,8 @@
 
 <section>
 	<button on:click={openPicker}>Add Projects</button>
+
+	{#each projects as project}
+		<ProjectItem bind:item={project} />
+	{/each}
 </section>
