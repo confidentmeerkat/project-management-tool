@@ -11,8 +11,11 @@
 	};
 </script>
 
-<div>
-	<h6>{item.path.split('/').reverse()[0]}</h6>
-	<p>{item.path}</p>
+<li class="rounded-md border border-gray-400 p-4 flex flex-row w-full">
+	<div class="flex flex-1 flex-col">
+		<h6>{item.path.split('/').reverse()[0]}</h6>
+		<p>{item.path}</p>
+	</div>
+
 	<button on:click={handleOpen}>Open</button>
-</div>
+</li>

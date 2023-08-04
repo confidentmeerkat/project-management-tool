@@ -31,10 +31,17 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<button on:click={openPicker}>Add Projects</button>
+<section class="p-2">
+	<div class="flex flex-row justify-between my-2">
+		<h1>Projects</h1>
+		<button on:click={openPicker} class="rounded-sm bg-blue-600 text-white py-1.5 px-3"
+			>Add Projects</button
+		>
+	</div>
 
-	{#each projects as project}
-		<ProjectItem bind:item={project} />
-	{/each}
+	<ul class="space-y-2">
+		{#each projects as project}
+			<ProjectItem bind:item={project} />
+		{/each}
+	</ul>
 </section>
