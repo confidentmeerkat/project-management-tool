@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import ProjectItem from './project-item.svelte';
 	import type { Project } from '../types';
+	import { Button, Heading, Listgroup } from 'flowbite-svelte';
 
 	let projects: Array<Project> = [];
 
@@ -33,15 +34,13 @@
 
 <section class="p-2">
 	<div class="flex flex-row justify-between my-2">
-		<h1>Projects</h1>
-		<button on:click={openPicker} class="rounded-sm bg-blue-600 text-white py-1.5 px-3"
-			>Add Projects</button
-		>
+		<Heading tag="h4">Projects</Heading>
+		<Button class="whitespace-nowrap" on:click={openPicker}>Add Projects</Button>
 	</div>
 
-	<ul class="space-y-2">
+	<Listgroup class="rounded-none border-x-0">
 		{#each projects as project}
 			<ProjectItem bind:item={project} />
 		{/each}
-	</ul>
+	</Listgroup>
 </section>
