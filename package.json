@@ -34,6 +34,10 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"source-map-js": "^1.0.2"
+		"@tauri-apps/api": "^1.4.0",
+		"autoprefixer": "^10.4.14",
+		"postcss": "^8.4.27",
+		"source-map-js": "^1.0.2",
+		"tailwindcss": "^3.3.3"
 	}
 }

@@ -1,7 +1,29 @@
-<script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+<script lang="ts">
+	import { invoke } from '@tauri-apps/api/tauri';
+	import { open } from '@tauri-apps/api/dialog';
+	import { onMount } from 'svelte';
+	import ProjectItem from './project-item.svelte';
+	import type { Project } from '../types';
+
+	let projects: Array<Project> = [];
+
+	onMount(() => {
+		invoke('get_projects').then((items) => {
+			projects = items as Project[];
+		});
+	});
+
+	const openPicker = async () => {
+		const path = await open({ directory: true, multiple: false });
+
+		invoke('create_project', { path }).then((result) => {
+			if (result === 'success') {
+				invoke('get_projects').then((items) => {
+					projects = items as Project[];
+				});
+			}
+		});
+	};
 </script>
 
 <svelte:head>
@@ -9,51 +31,17 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
+<section class="p-2">
+	<div class="flex flex-row justify-between my-2">
+		<h1>Projects</h1>
+		<button on:click={openPicker} class="rounded-sm bg-blue-600 text-white py-1.5 px-3"
+			>Add Projects</button
+		>
+	</div>
 
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+	<ul class="space-y-2">
+		{#each projects as project}
+			<ProjectItem bind:item={project} />
+		{/each}
+	</ul>
 </section>
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
