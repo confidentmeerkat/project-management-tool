@@ -42,11 +42,12 @@ pub fn get_projects() -> Vec<Document> {
 }
 
 #[command]
-pub fn create_project(path: String) -> String {
+pub fn create_project(path: String, title: String) -> String {
     let app = App::new();
 
     let new_project = doc! {
         "path": path,
+        "title": title
     };
 
     let result = app.service_container.project.create(new_project);

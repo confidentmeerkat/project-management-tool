@@ -1,30 +1,25 @@
 <script lang="ts">
-	import { invoke } from '@tauri-apps/api/tauri';
-	import { open } from '@tauri-apps/api/dialog';
 	import { onMount } from 'svelte';
 	import ProjectItem from './project-item.svelte';
-	import type { Project } from '../types';
 	import { Button, Heading, Listgroup } from 'flowbite-svelte';
+	import NewModal from '$lib/components/projects/new-modal.svelte';
+	import { getProjects } from '$lib/api/tauri/projects';
+	import projects from '$lib/store/projects';
 
-	let projects: Array<Project> = [];
+	export let data;
 
 	onMount(() => {
-		invoke('get_projects').then((items) => {
-			projects = items as Project[];
+		getProjects().then((items) => {
+			projects.set(items);
 		});
 	});
 
-	const openPicker = async () => {
-		const path = await open({ directory: true, multiple: false });
-
-		invoke('create_project', { path }).then((result) => {
-			if (result === 'success') {
-				invoke('get_projects').then((items) => {
-					projects = items as Project[];
-				});
-			}
-		});
+	const handleOpenModal = () => {
+		openNewModal = true;
 	};
+	const handleCloseModal = () => openNewModal = false;
+
+	let openNewModal = false;
 </script>
 
 <svelte:head>
@@ -35,12 +30,14 @@
 <section class="p-2">
 	<div class="flex flex-row justify-between my-2">
 		<Heading tag="h4">Projects</Heading>
-		<Button class="whitespace-nowrap" on:click={openPicker}>Add Projects</Button>
+		<Button class="whitespace-nowrap" on:click={handleOpenModal}>Add Projects</Button>
 	</div>
 
 	<Listgroup class="rounded-none border-x-0">
-		{#each projects as project}
+		{#each $projects as project}
 			<ProjectItem bind:item={project} />
 		{/each}
 	</Listgroup>
+
+	<NewModal bind:open={openNewModal} bind:formData={data.form} on:close={handleCloseModal} />
 </section>

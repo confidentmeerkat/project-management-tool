@@ -38,10 +38,12 @@
 		"@floating-ui/dom": "^1.5.1",
 		"@tauri-apps/api": "^1.4.0",
 		"autoprefixer": "^10.4.14",
+		"change-case": "^4.1.2",
 		"flowbite": "^1.8.1",
 		"flowbite-svelte": "^0.40.2",
 		"postcss": "^8.4.27",
 		"source-map-js": "^1.0.2",
+		"sveltekit-superforms": "^1.5.1",
 		"tailwind-merge": "^1.14.0",
 		"tailwindcss": "^3.3.3"
 	}
