@@ -8,6 +8,7 @@ use mongodb::{
 
 pub struct Project {
     path: String,
+    title: String,
     created_at: String,
     updated_at: String,
 }
@@ -40,7 +41,8 @@ impl ProjectService {
             Err(err) => Err(err),
             Ok(result) => {
                 let path = project.get("path");
-                Ok(doc! {"path": path})
+                let title = project.get("title");
+                Ok(doc! {"path": path, "title":  title})
             }
         }
     }
